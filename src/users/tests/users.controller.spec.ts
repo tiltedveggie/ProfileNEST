@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
+import { CreateUserDTO } from '../dto/createUser.dto';
+import { User as UserEntity } from '../user.entity';
 
 describe('UsersController', () => {
 	let service: UsersService;
@@ -15,9 +17,7 @@ describe('UsersController', () => {
 				{
 					provide: UsersService,
 					useValue: {
-						create: jest.fn(),
-						save: jest.fn(),
-						findOne: jest.fn()
+						createUser: jest.fn()
 					}
 				}
 			]
@@ -30,5 +30,23 @@ describe('UsersController', () => {
 	it('should be defined', () => {
 		expect(service).toBeDefined();
 		expect(controller).toBeDefined();
+	});
+
+	describe('database methods', () => {
+		it('should create an user', async () => {
+			const body: CreateUserDTO = {
+				username: 'Raul',
+				password: 'raulpassword19'
+			};
+
+			const userMockData = { ...body } as UserEntity;
+
+			jest.spyOn(service, 'createUser').mockResolvedValueOnce(userMockData);
+
+			const result = await controller.createUser(body);
+
+			expect(result).toBeDefined();
+			expect(service.createUser).toHaveBeenCalledTimes(1);
+		});
 	});
 });
