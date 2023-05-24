@@ -5,6 +5,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { User as UserEntity } from '../user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDTO } from '../dto/createUser.dto';
+import { usersMock } from './mocks/users.mock';
 
 describe('UsersService', () => {
 	let service: UsersService;
@@ -20,6 +21,7 @@ describe('UsersService', () => {
 					useValue: {
 						create: jest.fn(),
 						save: jest.fn(),
+						find: jest.fn(),
 						findOne: jest.fn()
 					}
 				}
@@ -38,6 +40,17 @@ describe('UsersService', () => {
 	});
 
 	describe('database methods', () => {
+		it('should return an array of users', async () => {
+			const users = usersMock;
+
+			jest.spyOn(repository, 'find').mockResolvedValueOnce(users);
+
+			const result = await service.getUsers();
+
+			expect(result).toBeDefined();
+			expect(repository.find).toHaveBeenCalledTimes(1);
+		});
+
 		it('should create an user', async () => {
 			const userData: CreateUserDTO = {
 				username: 'Raul',

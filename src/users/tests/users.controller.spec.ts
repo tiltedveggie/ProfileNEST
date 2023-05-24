@@ -3,6 +3,7 @@ import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
 import { CreateUserDTO } from '../dto/createUser.dto';
 import { User as UserEntity } from '../user.entity';
+import { usersMock } from './mocks/users.mock';
 
 describe('UsersController', () => {
 	let service: UsersService;
@@ -17,6 +18,7 @@ describe('UsersController', () => {
 				{
 					provide: UsersService,
 					useValue: {
+						getUsers: jest.fn(),
 						createUser: jest.fn()
 					}
 				}
@@ -33,6 +35,17 @@ describe('UsersController', () => {
 	});
 
 	describe('database methods', () => {
+		it('should return an array of users', async () => {
+			const users = usersMock;
+
+			jest.spyOn(service, 'getUsers').mockResolvedValueOnce(users);
+
+			const result = await service.getUsers();
+
+			expect(result).toBeDefined();
+			expect(service.getUsers).toHaveBeenCalledTimes(1);
+		});
+
 		it('should create an user', async () => {
 			const body: CreateUserDTO = {
 				username: 'Raul',
