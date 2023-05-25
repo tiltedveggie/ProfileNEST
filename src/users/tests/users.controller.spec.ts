@@ -5,6 +5,7 @@ import { CreateUserDTO } from '../dto/createUser.dto';
 import { User as UserEntity } from '../user.entity';
 import { usersMock } from './mocks/users.mock';
 import { UpdateUserDTO } from '../dto/updateUser.dto';
+import { CreateProfileDTO } from '../dto/createProfile.dto';
 
 describe('UsersController', () => {
 	let service: UsersService;
@@ -21,6 +22,7 @@ describe('UsersController', () => {
 					useValue: {
 						getUsers: jest.fn(),
 						createUser: jest.fn(),
+						createProfile: jest.fn(),
 						updateUser: jest.fn(),
 						deleteUser: jest.fn()
 					}
@@ -100,6 +102,25 @@ describe('UsersController', () => {
 
 			expect(result).toBeDefined();
 			expect(service.deleteUser).toHaveBeenCalledTimes(1);
+		});
+	});
+
+	describe('database methods 2', () => {
+		it('should create an user profile', async () => {
+			const id = 1;
+
+			const userProfile: CreateProfileDTO = {
+				firstname: 'Raul',
+				lastname: 'Armando',
+				age: 35
+			};
+
+			jest.spyOn(service, 'createProfile').mockResolvedValueOnce(usersMock[0]);
+
+			const result = await service.createProfile(id, userProfile);
+
+			expect(result).toBeDefined();
+			expect(service.createProfile).toHaveBeenCalledTimes(1);
 		});
 	});
 });
