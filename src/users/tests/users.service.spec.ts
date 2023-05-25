@@ -85,6 +85,7 @@ describe('UsersService', () => {
 				affected: 1
 			};
 
+			jest.spyOn(repository, 'findOne').mockResolvedValueOnce(usersMock[0]);
 			jest.spyOn(repository, 'update').mockResolvedValueOnce(mockResponse);
 
 			const result = await service.updateUser(id, userData);

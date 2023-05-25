@@ -3,6 +3,7 @@ import {
 	Controller,
 	Delete,
 	Get,
+	HttpException,
 	Param,
 	ParseIntPipe,
 	Patch,
@@ -23,12 +24,14 @@ export class UsersController {
 	}
 
 	@Post()
-	createUser(@Body() newUser: CreateUserDTO): Promise<User> {
+	createUser(@Body() newUser: CreateUserDTO): Promise<User | HttpException> {
 		return this.usersServices.createUser(newUser);
 	}
 
 	@Get(':id')
-	getOneUser(@Param('id', ParseIntPipe) id: number): Promise<User> {
+	getOneUser(
+		@Param('id', ParseIntPipe) id: number
+	): Promise<User | HttpException> {
 		return this.usersServices.getOneUser(id);
 	}
 
