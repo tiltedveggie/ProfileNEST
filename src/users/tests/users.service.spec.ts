@@ -6,6 +6,7 @@ import { User as UserEntity } from '../user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDTO } from '../dto/createUser.dto';
 import { usersMock } from './mocks/users.mock';
+import { UpdateUserDTO } from '../dto/updateUser.dto';
 
 describe('UsersService', () => {
 	let service: UsersService;
@@ -19,10 +20,12 @@ describe('UsersService', () => {
 				{
 					provide: getRepositoryToken(UserEntity),
 					useValue: {
+						find: jest.fn(),
+						findOne: jest.fn(),
 						create: jest.fn(),
 						save: jest.fn(),
-						find: jest.fn(),
-						findOne: jest.fn()
+						update: jest.fn(),
+						delete: jest.fn()
 					}
 				}
 			]
@@ -67,6 +70,43 @@ describe('UsersService', () => {
 			expect(result).toBeDefined();
 			expect(repository.create).toHaveBeenCalledTimes(1);
 			expect(repository.save).toHaveBeenCalledTimes(1);
+		});
+
+		it('should update an user', async () => {
+			const id = 1;
+
+			const userData: UpdateUserDTO = {
+				username: 'Raul'
+			};
+
+			const mockResponse = {
+				generatedMaps: [],
+				raw: [],
+				affected: 1
+			};
+
+			jest.spyOn(repository, 'update').mockResolvedValueOnce(mockResponse);
+
+			const result = await service.updateUser(id, userData);
+
+			expect(result).toBeDefined();
+			expect(repository.update).toHaveBeenCalledTimes(1);
+		});
+
+		it('should delete an user', async () => {
+			const id = 1;
+
+			const mockResponse = {
+				raw: [],
+				affected: 1
+			};
+
+			jest.spyOn(repository, 'delete').mockResolvedValueOnce(mockResponse);
+
+			const result = await service.deleteUser(id);
+
+			expect(result).toBeDefined();
+			expect(repository.delete).toHaveBeenCalledTimes(1);
 		});
 	});
 });

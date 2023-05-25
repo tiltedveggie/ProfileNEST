@@ -4,6 +4,7 @@ import { UsersService } from '../users.service';
 import { CreateUserDTO } from '../dto/createUser.dto';
 import { User as UserEntity } from '../user.entity';
 import { usersMock } from './mocks/users.mock';
+import { UpdateUserDTO } from '../dto/updateUser.dto';
 
 describe('UsersController', () => {
 	let service: UsersService;
@@ -19,7 +20,9 @@ describe('UsersController', () => {
 					provide: UsersService,
 					useValue: {
 						getUsers: jest.fn(),
-						createUser: jest.fn()
+						createUser: jest.fn(),
+						updateUser: jest.fn(),
+						deleteUser: jest.fn()
 					}
 				}
 			]
@@ -60,6 +63,43 @@ describe('UsersController', () => {
 
 			expect(result).toBeDefined();
 			expect(service.createUser).toHaveBeenCalledTimes(1);
+		});
+
+		it('should update an user', async () => {
+			const id = 1;
+
+			const userData: UpdateUserDTO = {
+				username: 'Raul'
+			};
+
+			const mockResponse = {
+				generatedMaps: [],
+				raw: [],
+				affected: 1
+			};
+
+			jest.spyOn(service, 'updateUser').mockResolvedValueOnce(mockResponse);
+
+			const result = await service.updateUser(id, userData);
+
+			expect(result).toBeDefined();
+			expect(service.updateUser).toHaveBeenCalledTimes(1);
+		});
+
+		it('should delete an user', async () => {
+			const id = 1;
+
+			const mockResponse = {
+				raw: [],
+				affected: 1
+			};
+
+			jest.spyOn(service, 'deleteUser').mockResolvedValueOnce(mockResponse);
+
+			const result = await service.deleteUser(id);
+
+			expect(result).toBeDefined();
+			expect(service.deleteUser).toHaveBeenCalledTimes(1);
 		});
 	});
 });
