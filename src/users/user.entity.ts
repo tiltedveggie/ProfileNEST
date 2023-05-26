@@ -2,10 +2,12 @@ import {
 	Column,
 	Entity,
 	JoinColumn,
+	OneToMany,
 	OneToOne,
 	PrimaryGeneratedColumn
 } from 'typeorm';
 import { Profile } from './profile.entity';
+import { Post } from '../posts/post.entity';
 
 @Entity()
 export class User {
@@ -27,4 +29,7 @@ export class User {
 	@OneToOne(() => Profile)
 	@JoinColumn()
 	profile: Profile;
+
+	@OneToMany(() => Post, post => post.author)
+	posts: Post[];
 }
