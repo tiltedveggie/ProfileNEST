@@ -1,3 +1,4 @@
+import { Post } from '../../../posts/post.entity';
 import { Profile } from '../../../../src/users/profile.entity';
 import { User } from '../../../../src/users/user.entity';
 
@@ -8,7 +9,8 @@ export const usersMock: User[] = [
 		password: 'holaxd1',
 		createdAt: new Date(),
 		authStrategy: null,
-		profile: new Profile()
+		profile: new Profile(),
+		posts: [new Post()]
 	},
 	{
 		id: 2,
@@ -16,7 +18,8 @@ export const usersMock: User[] = [
 		password: 'holaxd2',
 		createdAt: new Date(),
 		authStrategy: null,
-		profile: new Profile()
+		profile: new Profile(),
+		posts: [new Post()]
 	},
 	{
 		id: 3,
@@ -24,6 +27,7 @@ export const usersMock: User[] = [
 		password: 'holaxd3',
 		createdAt: new Date(),
 		authStrategy: null,
-		profile: new Profile()
+		profile: new Profile(),
+		posts: [new Post()]
 	}
 ];
